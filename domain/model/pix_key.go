@@ -28,16 +28,21 @@ type PixKey struct {
 func NewPixKey(kind string, account *Account, key string) (*PixKey, error) {
 
 	pixKey := PixKey{
-		Kind:    kind,
-		Key:     key,
-		Account: account,
-		Status:  "active",
+		Kind:      kind,
+		Key:       key,
+		Account:   account,
+		AccountID: account.ID,
+		Status:    "active",
 	}
 
 	pixKey.ID = uuid.NewString()
 	pixKey.CreatedAt = time.Now()
 
-	pixKey.isValid()
+	err := pixKey.isValid()
+
+	if err != nil {
+		return nil, err
+	}
 
 	return &pixKey, nil
 }

@@ -1,6 +1,7 @@
 package model
 
 import (
+	"errors"
 	"time"
 
 	"github.com/asaskevich/govalidator"
@@ -26,13 +27,21 @@ func NewAccount(bank *Bank, number, ownerName string) (*Account, error) {
 	account.ID = uuid.NewString()
 	account.CreatedAt = time.Now()
 
-	account.isValid()
+	err := account.isValid()
+
+	if err != nil {
+		return nil, err
+	}
 
 	return &account, nil
 }
 
 func (account *Account) isValid() error {
 	_, err := govalidator.ValidateStruct(account)
+
+	if account.Number == "" {
+		return errors.New("number of account cannot be null")
+	}
 
 	if err != nil {
 		return err

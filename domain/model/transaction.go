@@ -48,7 +48,11 @@ func NewTransaction(accountFrom *Account, amount float64, pixKeyTo *PixKey, desc
 	transation.ID = uuid.NewString()
 	transation.CreatedAt = time.Now()
 
-	transation.isValid()
+	err := transation.isValid()
+
+	if err != nil {
+		return nil, err
+	}
 
 	return &transation, nil
 }
@@ -103,7 +107,7 @@ func (t *Transaction) Confirm() error {
 
 func (t *Transaction) Cancel(description string) error {
 	t.Status = TransactionError
-	t.Description = description
+	t.CancelDescription = description
 	t.UpdatedAt = time.Now()
 
 	err := t.isValid()
