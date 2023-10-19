@@ -66,7 +66,7 @@ func TestNewTransaction(t *testing.T) {
 
 		assert.Equal(t, transaction.Status, model.TransactionCompleted)
 
-		transaction.Cancel("Error")
+		transaction.Error("Error")
 
 		assert.Equal(t, transaction.Status, model.TransactionError)
 		assert.Equal(t, transaction.CancelDescription, "Error")

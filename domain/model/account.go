@@ -10,10 +10,11 @@ import (
 
 type Account struct {
 	Base      `valid:"required"`
-	OwnerName string    `json:"owner_name" valid:"notnull"`
+	OwnerName string    `gorm:"column:owner_name;type:varchar(255):not null" json:"owner_name" valid:"notnull"`
 	Bank      *Bank     `json:"bank" valid:"-"`
-	Number    string    `json:"number" valid:"notnull"`
-	PixKeys   []*PixKey `valid:"-"`
+	BankID    string    `gorm:"column:bank_id;type:uuid;not null" valid:"-"`
+	Number    string    `gorm:"type:varchar(255)" json:"number" valid:"notnull"`
+	PixKeys   []*PixKey `gorm:"ForeignKey:AccountID" valid:"-"`
 }
 
 func NewAccount(bank *Bank, number, ownerName string) (*Account, error) {
